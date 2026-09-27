@@ -1,53 +1,40 @@
-# Resources — Agent Contract
+# UnitEd Resources — the system
 
-This repo is the curated, public resource library for UnitEd workspaces.
-Humans browse `README.md`; this file is the contract for agents reading or
-adding content.
+One line: research decides the categories, the library fills them, and the
+app walks each teacher through one small step at a time.
 
-## What belongs here
+## Two readers
 
-- Classroom-ready teaching resources: templates, guides, routines, rubrics.
-- Every resource is **reviewed and approved** before it lands. No drafts,
-  no unvetted external dumps.
+1. **The UnitEd web app** reads this repo over the GitHub API. It queries
+   frontmatter — it never slurps bodies. A node's title is the file's first
+   `# ` heading; graph edges come from wikilinks (double square brackets
+   around an exact title).
+2. **Agents and humans** add and organize content. Read top-down: this file →
+   the folder's `CONTEXT.md` → the file itself. Load only what the task needs.
 
-## Layout
+## The query protocol
 
-```
-CONTEXT.md          this contract
-README.md           human index (one wikilink bullet per resource)
-resources/          one markdown file per resource
-```
+- Every content file carries single-line YAML frontmatter: `type`,
+  `category`, `tags`, `status` (plus `url` for external content). The schema
+  lives in `20-resources/CONTEXT.md`.
+- Frontmatter is the filter surface; bodies are read only when a resource is
+  served — and provider-card bodies (`20-resources/30_providers/`) are read
+  at step-time because they name which small part to fetch live.
+- `_templates/` is excluded from scans — its files carry frontmatter but are
+  stamps, not content.
+- Valid categories are exactly the seven defined in
+  `10-logics/20_content-framework/` — `1.1` through `3.2`. Nothing else is a
+  category.
+- Matching a teacher to their next step follows `10-logics/30_matching/`.
 
-## Resource file schema
+## The flows
 
-Every file in `resources/` starts with YAML frontmatter:
+| Flow | Path |
+|---|---|
+| New teacher → first step | app asks the profile questions → Jev evaluates the answers → one category → one resource from `20-resources/` |
+| Teacher finishes a step → next step | `10-logics/30_matching/03_progression-rules.md` |
+| New material arrives | dropped in `00-inbox/` → filed per `00-inbox/CONTEXT.md` |
+| Big provider content | never mirrored — fetched live in small parts per `20-resources/30_providers/CONTEXT.md` |
 
-```yaml
----
-type: template | guide | rubric | routine
-subject: any            # or e.g. biology, mathematics
-gradeLevels: [all]      # or e.g. [6-8, 9-12]
-tags: [lesson-planning] # lowercase, hyphenated
-status: approved        # required; anything else is not served
----
-```
-
-After the frontmatter: a `# Title` heading, a one-paragraph summary, then
-the resource itself in plain, warm markdown.
-
-## Wikilinks
-
-Related resources link to each other with `[[Exact Resource Title]]` — the
-title of the target resource as written in its `# Title` heading. Wikilinks
-are how agents and teachers discover connected material; every resource
-should link at least one other when a natural connection exists.
-
-## Rules for agents
-
-1. Read this file first. The frontmatter is the queryable surface — match
-   teachers to resources by `subject`, `gradeLevels`, and `tags`, never by
-   slurping full bodies.
-2. Only `status: approved` resources exist here by definition; if a file
-   lacks frontmatter or has another status, ignore it.
-3. Never restructure, rename, or reformat existing resources.
-4. New resources follow the schema above and add their bullet to `README.md`.
+Factory (stable): `_templates/` and `10-logics/`. Product (grows):
+`20-resources/` and `00-inbox/`.

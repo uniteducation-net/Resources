@@ -1,15 +1,8 @@
-# Resources
+# UnitEd Resources
 
-**All Approved Public Resources** — curated, classroom-ready material for
-teachers, read live by UnitEd workspaces. Every resource here is reviewed
-and approved.
+The knowledge base behind UnitEd workspaces: the logics that decide what a
+teacher learns next, and the resource library those steps are drawn from.
 
-## Index
-
-- [[Lesson Plan Template]] — a reusable five-part lesson structure for any subject
-- [[Classroom Discussion Routines]] — four named routines to get every student talking
-
-## For agents
-
-Read `CONTEXT.md` first — it is the contract for this library (schema,
-wikilinks, matching rules).
+**Agents and the app:** read `CLAUDE.md` (routing) and `CONTEXT.md` (the
+system and query protocol) first. Humans can browse the folders directly —
+every folder explains itself in its own `CONTEXT.md`.
